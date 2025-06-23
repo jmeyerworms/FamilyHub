@@ -1,0 +1,383 @@
+// Responsive breakpoints
+$mobile-sm: 320px;
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+.task-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+
+  @media (max-width: #{$mobile}) {
+    padding: 16px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Loading and Error States
+.loading-state,
+.not-found-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: #666;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+
+  h2 {
+    margin: 16px 0 8px 0;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    font-size: 1rem;
+  }
+}
+
+// Header
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 16px 20px;
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #333;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  @media (max-width: #{$mobile}) {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+
+    .header-actions h1 {
+      font-size: 1.3rem;
+    }
+
+    .action-buttons {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+}
+
+// Main Content
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Cards
+.info-card,
+.detail-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  mat-card-content {
+    padding: 20px;
+
+    @media (max-width: #{$mobile}) {
+      padding: 16px;
+    }
+  }
+}
+
+// Title Section
+.title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  .task-title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.3;
+    flex: 1;
+
+    &.completed {
+      text-decoration: line-through;
+      color: #666;
+    }
+
+    @media (max-width: #{$mobile}) {
+      font-size: 1.4rem;
+    }
+  }
+
+  .status-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: #{$mobile}) {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .status-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+
+.task-description {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+// Status Badge
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  &.status-todo {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+  }
+
+  &.status-inprogress {
+    background-color: #fff3e0;
+    color: #f57c00;
+  }
+
+  &.status-completed {
+    background-color: #e8f5e9;
+    color: #388e3c;
+  }
+
+  &.status-cancelled {
+    background-color: #ffebee;
+    color: #d32f2f;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+// Details Grid
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+
+  @media (max-width: #{$mobile}) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Detail Items
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .detail-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #666;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #999;
+    }
+  }
+
+  .detail-value {
+    font-size: 1rem;
+    color: #333;
+    margin-left: 26px;
+
+    &.priority-value {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+
+      &.priority-high {
+        color: #d32f2f;
+      }
+
+      &.priority-medium {
+        color: #f57c00;
+      }
+
+      &.priority-low {
+        color: #388e3c;
+      }
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+// Due Date Info
+.due-date-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .date {
+    font-weight: 500;
+  }
+
+  .time {
+    font-size: 0.875rem;
+    color: #666;
+  }
+
+  .days-info {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    display: inline-block;
+    width: fit-content;
+
+    &.overdue {
+      background-color: #ffcdd2;
+      color: #d32f2f;
+    }
+  }
+}
+
+// Tags
+.tags-container {
+  margin-left: 26px;
+
+  mat-chip-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  mat-chip {
+    background-color: #f5f5f5;
+    color: #666;
+  }
+}
+
+// Assigned Members
+.assigned-members {
+  margin-left: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .member-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #e3f2fd;
+    color: #1976d2;
+    border-radius: 16px;
+    font-size: 0.875rem;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Menu Actions
+.delete-action {
+  color: #d32f2f !important;
+}
+
+// Responsive adjustments
+@media (max-width: #{$mobile-sm}) {
+  .task-details-container {
+    padding: 12px;
+  }
+
+  .title-section {
+    .task-title {
+      font-size: 1.2rem;
+    }
+  }
+
+  .details-grid {
+    gap: 12px;
+  }
+
+  .detail-card {
+    mat-card-content {
+      padding: 12px;
+    }
+  }
+}

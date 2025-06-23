@@ -1,0 +1,304 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  color: #333;
+  background-color: #f8f9fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global responsive styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Make images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better touch targets for mobile */
+button,
+a {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Improve form elements on mobile */
+input,
+select,
+textarea {
+  font-size: 16px; /* Prevents zoom on iOS */
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+/* Material Design Theme Improvements */
+.mat-mdc-raised-button {
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+.mat-mdc-raised-button:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.mat-mdc-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Global Styles and Mobile Responsiveness */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Mobile-first responsive breakpoints */
+$mobile-small: 360px;
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$desktop-large: 1200px;
+
+/* Global mobile-first styles */
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
+  background-color: #f8f9fa;
+}
+
+/* Touch-friendly button and link styles */
+button,
+.mat-mdc-button,
+.mat-mdc-icon-button {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* Responsive container utility */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @media (max-width: #{$mobile}) {
+    padding: 0 12px;
+  }
+}
+
+/* Responsive grid utilities */
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+
+  &.grid-1 {
+    grid-template-columns: 1fr;
+  }
+
+  &.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+    @media (max-width: #{$mobile}) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+    @media (max-width: #{$tablet}) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: #{$mobile}) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+/* Mobile spacing utilities */
+.mobile-padding {
+  @media (max-width: #{$tablet}) {
+    padding: 12px !important;
+  }
+
+  @media (max-width: #{$mobile}) {
+    padding: 8px !important;
+  }
+}
+
+.mobile-margin {
+  @media (max-width: #{$tablet}) {
+    margin: 12px !important;
+  }
+
+  @media (max-width: #{$mobile}) {
+    margin: 8px !important;
+  }
+}
+
+/* Mobile typography */
+.mobile-text {
+  @media (max-width: #{$mobile}) {
+    font-size: 0.9rem;
+  }
+}
+
+/* Hide/show utilities for different screen sizes */
+.hide-mobile {
+  @media (max-width: #{$tablet}) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+
+  @media (max-width: #{$tablet}) {
+    display: block !important;
+  }
+}
+
+.show-mobile-flex {
+  display: none !important;
+
+  @media (max-width: #{$tablet}) {
+    display: flex !important;
+  }
+}
+
+/* Material Design component overrides for mobile */
+.mat-mdc-form-field {
+  width: 100%;
+
+  @media (max-width: #{$mobile}) {
+    .mat-mdc-text-field-wrapper {
+      min-height: 48px;
+    }
+  }
+}
+
+.mat-mdc-card {
+  @media (max-width: #{$mobile}) {
+    border-radius: 8px;
+    margin: 8px 0;
+  }
+}
+
+/* Improved scrolling for mobile */
+.mobile-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+  }
+}
+
+/* Responsive table wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  @media (max-width: #{$tablet}) {
+    border-radius: 8px;
+
+    table {
+      min-width: 600px;
+    }
+  }
+}
+
+/* Mobile-first flex utilities */
+.flex-column-mobile {
+  @media (max-width: #{$tablet}) {
+    flex-direction: column !important;
+  }
+}
+
+.flex-wrap-mobile {
+  @media (max-width: #{$tablet}) {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* Ensure proper spacing for fixed headers/footers */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* PWA status bar styling */
+@media (display-mode: standalone) {
+  body {
+    padding-top: max(env(safe-area-inset-top), 20px);
+  }
+}

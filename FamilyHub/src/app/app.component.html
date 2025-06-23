@@ -1,0 +1,11 @@
+<router-outlet></router-outlet>
+
+<!-- Modal overlay container for global access -->
+<ng-container *ngIf="modalState$ | async as modalType">
+  <div class="modal-overlay">
+    <div class="modal-container">
+      <app-login-modal *ngIf="modalType === 'login'"></app-login-modal>
+      <app-register-modal *ngIf="modalType === 'register'"></app-register-modal>
+    </div>
+  </div>
+</ng-container>

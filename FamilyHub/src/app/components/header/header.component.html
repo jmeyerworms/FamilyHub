@@ -1,0 +1,84 @@
+<div class="mobile-header-wrapper">
+  <!-- Top app bar -->
+  <mat-toolbar color="primary" class="mobile-toolbar">
+    <div class="toolbar-content">
+      <!-- Menu toggle button -->
+      <button
+        mat-icon-button
+        class="menu-button"
+        (click)="toggleMobileMenu()"
+        [class.active]="isMobileMenuOpen"
+      >
+        <mat-icon>{{ isMobileMenuOpen ? "close" : "menu" }}</mat-icon>
+      </button>
+
+      <!-- App title/logo -->
+      <div class="app-title" routerLink="/home" (click)="closeMobileMenu()">
+        <span>{{ appName }}</span>
+      </div>
+
+      <!-- Right side actions -->
+      <div class="action-buttons">
+        <ng-container
+          *ngIf="
+            (authService.isAuthenticated$ | async) === false;
+            else loggedIn
+          "
+        >
+          <button mat-button (click)="openRegisterModal()" class="register-btn">
+            Register
+          </button>
+          <button mat-icon-button (click)="openLoginModal()">
+            <mat-icon>login</mat-icon>
+          </button>
+        </ng-container>
+        <ng-template #loggedIn>
+          <button mat-icon-button [matMenuTriggerFor]="userMenu">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button
+              mat-menu-item
+              routerLink="/profile"
+              (click)="closeMobileMenu()"
+            >
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
+            </button>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        </ng-template>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <!-- Mobile side navigation -->
+  <div class="mobile-nav" [class.open]="isMobileMenuOpen">
+    <div class="nav-header">
+      <div class="app-brand">{{ appName }}</div>
+    </div>
+
+    <mat-nav-list>
+      <a
+        mat-list-item
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        (click)="closeMobileMenu()"
+      >
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span>{{ item.name }}</span>
+      </a>
+    </mat-nav-list>
+  </div>
+
+  <!-- Backdrop overlay for navigation drawer -->
+  <div
+    class="mobile-backdrop"
+    [class.open]="isMobileMenuOpen"
+    (click)="closeMobileMenu()"
+  ></div>
+</div>

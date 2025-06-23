@@ -1,0 +1,256 @@
+<div class="task-details-container" *ngIf="!isLoading">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-icon>hourglass_empty</mat-icon>
+    <p>Loading task details...</p>
+  </div>
+
+  <!-- Task Not Found -->
+  <div class="not-found-state" *ngIf="taskNotFound">
+    <mat-icon>error_outline</mat-icon>
+    <h2>Task Not Found</h2>
+    <p>The task you're looking for doesn't exist or has been deleted.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to Tasks
+    </button>
+  </div>
+
+  <!-- Task Details -->
+  <div class="task-details" *ngIf="task && !taskNotFound">
+    <!-- Header -->
+    <div class="task-header">
+      <div class="header-actions">
+        <button mat-icon-button (click)="goBack()" matTooltip="Back to tasks">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Task Details</h1>
+      </div>
+
+      <div class="action-buttons">
+        <button mat-button (click)="editTask()" color="primary">
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="actionMenu"
+          matTooltip="More actions"
+        >
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #actionMenu="matMenu">
+          <button mat-menu-item (click)="duplicateTask()">
+            <mat-icon>content_copy</mat-icon>
+            <span>Duplicate</span>
+          </button>
+          <button mat-menu-item (click)="postponeTask(1)" *ngIf="task.dueDate">
+            <mat-icon>today</mat-icon>
+            <span>Postpone 1 day</span>
+          </button>
+          <button mat-menu-item (click)="postponeTask(7)" *ngIf="task.dueDate">
+            <mat-icon>date_range</mat-icon>
+            <span>Postpone 1 week</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="deleteTask()" class="delete-action">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="task-content">
+      <!-- Title and Status -->
+      <mat-card class="info-card">
+        <mat-card-content>
+          <div class="title-section">
+            <h2
+              class="task-title"
+              [class.completed]="task.status === TaskStatus.Completed"
+            >
+              {{ task.title }}
+            </h2>
+            <div class="status-actions">
+              <div class="status-badge" [class]="getStatusClass(task.status)">
+                <mat-icon>{{ getStatusIcon(task.status) }}</mat-icon>
+                <span>{{ formatStatus(task.status) }}</span>
+              </div>
+              <button
+                mat-icon-button
+                (click)="toggleTaskStatus()"
+                [matTooltip]="
+                  task.status === TaskStatus.Completed
+                    ? 'Mark as incomplete'
+                    : 'Mark as complete'
+                "
+                color="primary"
+              >
+                <mat-icon>{{
+                  task.status === TaskStatus.Completed ? "undo" : "check_circle"
+                }}</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <p class="task-description" *ngIf="task.description">
+            {{ task.description }}
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Task Details Grid -->
+      <div class="details-grid">
+        <!-- Priority -->
+        <mat-card class="detail-card">
+          <mat-card-content>
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>flag</mat-icon>
+                <span>Priority</span>
+              </div>
+              <div
+                class="detail-value priority-value"
+                [class]="getPriorityClass(task.priority)"
+              >
+                <mat-icon>{{ getPriorityIcon(task.priority) }}</mat-icon>
+                <span>{{ formatPriority(task.priority) }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Due Date -->
+        <mat-card class="detail-card" *ngIf="task.dueDate">
+          <mat-card-content>
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>schedule</mat-icon>
+                <span>Due Date</span>
+              </div>
+              <div class="detail-value">
+                <div class="due-date-info">
+                  <span class="date">{{
+                    task.dueDate | date : "MMM d, y"
+                  }}</span>
+                  <span class="time" *ngIf="task.dueDate">{{
+                    task.dueDate | date : "h:mm a"
+                  }}</span>
+                  <span
+                    class="days-info"
+                    [class.overdue]="isOverdue()"
+                    *ngIf="getDaysUntilDue() !== null"
+                  >
+                    <ng-container *ngIf="getDaysUntilDue()! > 0">
+                      {{ getDaysUntilDue() }} days remaining
+                    </ng-container>
+                    <ng-container *ngIf="getDaysUntilDue()! === 0">
+                      Due today
+                    </ng-container>
+                    <ng-container *ngIf="getDaysUntilDue()! < 0">
+                      {{ Math.abs(getDaysUntilDue()!) }} days overdue
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Location -->
+        <mat-card class="detail-card" *ngIf="task.location">
+          <mat-card-content>
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>place</mat-icon>
+                <span>Location</span>
+              </div>
+              <div class="detail-value">
+                <span>{{ task.location }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Created Date -->
+        <mat-card class="detail-card">
+          <mat-card-content>
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>event</mat-icon>
+                <span>Created</span>
+              </div>
+              <div class="detail-value">
+                <span>{{ task.createdAt | date : "MMM d, y" }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Last Updated -->
+        <mat-card
+          class="detail-card"
+          *ngIf="task.updatedAt && task.updatedAt !== task.createdAt"
+        >
+          <mat-card-content>
+            <div class="detail-item">
+              <div class="detail-label">
+                <mat-icon>update</mat-icon>
+                <span>Updated</span>
+              </div>
+              <div class="detail-value">
+                <span>{{ task.updatedAt | date : "MMM d, y" }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Tags -->
+      <mat-card class="info-card" *ngIf="task.tags && task.tags.length > 0">
+        <mat-card-content>
+          <div class="detail-item">
+            <div class="detail-label">
+              <mat-icon>local_offer</mat-icon>
+              <span>Tags</span>
+            </div>
+            <div class="tags-container">
+              <mat-chip-set>
+                <mat-chip *ngFor="let tag of task.tags">
+                  {{ tag }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!-- Assigned Members -->
+      <mat-card
+        class="info-card"
+        *ngIf="task.assignedMembers && task.assignedMembers.length > 0"
+      >
+        <mat-card-content>
+          <div class="detail-item">
+            <div class="detail-label">
+              <mat-icon>people</mat-icon>
+              <span>Assigned To</span>
+            </div>
+            <div class="assigned-members">
+              <div
+                *ngFor="let member of task.assignedMembers"
+                class="member-chip"
+              >
+                <mat-icon>person</mat-icon>
+                <span>{{ member.name }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

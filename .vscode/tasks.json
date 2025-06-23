@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-backend",
+      "command": "dotnet",
+      "type": "process",
+      "args": ["build", "${workspaceFolder}/FamilyHub.Api", "-c", "Debug"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "start-backend",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/FamilyHub.Api",
+        "--configuration",
+        "Debug"
+      ],
+      "problemMatcher": "$msCompile",
+      "isBackground": true
+    },
+    {
+      "label": "npm: start-ui",
+      "type": "npm",
+      "script": "start",
+      "path": "FamilyHub",
+      "isBackground": true,
+      "problemMatcher": {
+        "base": "$tsc",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*Compiled successfully.*",
+          "endsPattern": ".*Compiled successfully.*"
+        }
+      }
+    }
+  ]
+}

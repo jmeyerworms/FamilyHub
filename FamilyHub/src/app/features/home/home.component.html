@@ -1,0 +1,67 @@
+<div class="home-container">
+  <section class="welcome-section">
+    <div class="welcome-content">
+      <h1>Welcome to <span class="highlight">Family Hub</span></h1>
+      <p class="welcome-text">
+        Your all-in-one family planning and organization solution
+      </p>
+      <div class="action-buttons">
+        <button mat-raised-button color="primary" routerLink="/calendar">
+          <mat-icon>calendar_today</mat-icon>
+          Plan Your Week
+        </button>
+        <button mat-raised-button color="accent" routerLink="/tasks">
+          <mat-icon>checklist</mat-icon>
+          Manage Tasks
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="quick-access">
+    <h2>Quick Access</h2>
+    <div class="quick-access-grid">
+      <a class="quick-tile" routerLink="/calendar">
+        <mat-icon class="tile-icon">calendar_today</mat-icon>
+        <h3>Calendar</h3>
+        <p>View and manage your family's schedule</p>
+      </a>
+      <a class="quick-tile" routerLink="/tasks">
+        <mat-icon class="tile-icon">assignment</mat-icon>
+        <h3>Tasks</h3>
+        <p>Keep track of your family's to-do lists</p>
+      </a>
+      <a class="quick-tile" routerLink="/photos">
+        <mat-icon class="tile-icon">photo_library</mat-icon>
+        <h3>Photos</h3>
+        <p>Share and store your precious memories</p>
+      </a>
+      <a class="quick-tile" routerLink="/messaging">
+        <mat-icon class="tile-icon">chat</mat-icon>
+        <h3>Messaging</h3>
+        <p>Keep in touch with your loved ones</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="upcoming-events" *ngIf="(upcomingEvents$ | async)?.length">
+    <h2>Upcoming Events</h2>
+    <mat-card class="event-list-card">
+      <mat-list role="list">
+        <mat-list-item
+          role="listitem"
+          *ngFor="let event of upcomingEvents$ | async"
+          class="event-item"
+        >
+          <mat-icon matListItemIcon [ngClass]="event.type">
+            {{ getEventIcon(event.type) }}
+          </mat-icon>
+          <div matListItemTitle>{{ event.title }}</div>
+          <div matListItemLine>
+            {{ event.date | date : "MMM d, y, h:mm a" }}
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+  </section>
+</div>

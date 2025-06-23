@@ -1,0 +1,186 @@
+.mobile-header-wrapper {
+  position: relative;
+  width: 100%;
+
+  // Top toolbar/app bar styling
+  .mobile-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    z-index: 1000;
+    background-color: #3f51b5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+
+    .toolbar-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 100%;
+      padding: 0 4px;
+    }
+
+    .menu-button {
+      margin-right: 8px;
+      transition: transform 0.3s ease;
+
+      &.active {
+        transform: rotate(180deg);
+      }
+    }
+
+    .app-title {
+      flex: 1;
+      font-size: 20px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+
+      span {
+        color: white;
+        transition: opacity 0.2s ease;
+
+        &:active {
+          opacity: 0.7;
+        }
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+
+      .register-btn {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 20px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+
+  // Side navigation drawer
+  .mobile-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background-color: white;
+    z-index: 1001;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.open {
+      transform: translateX(0);
+    }
+
+    .nav-header {
+      height: 128px;
+      background-color: #3f51b5;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 16px;
+
+      .app-brand {
+        color: white;
+        font-size: 24px;
+        font-weight: 500;
+      }
+    }
+
+    .mat-nav-list {
+      padding-top: 8px;
+
+      a {
+        height: 48px;
+        margin: 0 8px;
+        border-radius: 4px;
+        color: rgba(0, 0, 0, 0.87);
+
+        .nav-icon {
+          margin-right: 16px;
+          color: rgba(0, 0, 0, 0.54);
+        }
+
+        &.active {
+          background-color: rgba(63, 81, 181, 0.12);
+          color: #3f51b5;
+
+          .nav-icon {
+            color: #3f51b5;
+          }
+        }
+      }
+
+      // Staggered animation for menu items
+      a {
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      @for $i from 1 through 10 {
+        a:nth-child(#{$i}) {
+          transition-delay: 0.05s * $i;
+        }
+      }
+    }
+
+    &.open .mat-nav-list a {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  // Backdrop overlay
+  .mobile-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+
+    &.open {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// Add padding to body to account for fixed toolbar
+:host {
+  display: block;
+
+  & + * {
+    margin-top: 56px; // Match toolbar height
+  }
+}

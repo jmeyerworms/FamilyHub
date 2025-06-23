@@ -1,0 +1,367 @@
+.family-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px;
+  }
+}
+
+.family-card {
+  margin-bottom: 20px;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header-actions {
+  margin-left: auto;
+}
+
+.add-member-btn {
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+// Form styling
+.member-form-container {
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+
+    @media (max-width: 480px) {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+  }
+}
+
+.member-form {
+  .form-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    @media (max-width: 768px) {
+      gap: 20px;
+    }
+
+    @media (max-width: 599px) {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  .avatar-section {
+    flex: 0 0 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+
+    @media (max-width: 599px) {
+      flex: none;
+      margin: 0 auto 24px;
+
+      .avatar-preview {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .avatar-preview {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
+
+  .avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-fields {
+    flex: 1;
+    min-width: 280px;
+
+    @media (max-width: 599px) {
+      min-width: 100%;
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 16px;
+
+    button {
+      min-height: 44px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 480px) {
+      flex-direction: column-reverse;
+      gap: 8px;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Loading state
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+
+  p {
+    margin-top: 16px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+// Family members grid
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .member-card {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border-radius: 12px;
+    min-height: 200px;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(-2px);
+    }
+
+    .member-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      border: 3px solid #f0f0f0;
+      margin-bottom: 16px;
+    }
+
+    .member-info {
+      text-align: center;
+      margin-bottom: 16px;
+      flex: 1;
+
+      h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 1.3;
+      }
+    }
+
+    .member-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+
+      button {
+        min-width: 40px;
+        min-height: 40px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 12px;
+      min-height: 180px;
+
+      .member-avatar {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 12px;
+      }
+
+      .member-info h3 {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      border-radius: 8px;
+      min-height: 160px;
+
+      .member-avatar {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+      }
+
+      .member-info h3 {
+        font-size: 15px;
+      }
+
+      .member-actions {
+        top: 6px;
+        right: 6px;
+
+        button {
+          min-width: 36px;
+          min-height: 36px;
+        }
+      }
+    }
+  }
+}
+
+// Empty state
+.empty-state {
+  padding: 64px 24px;
+  text-align: center;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  grid-column: 1 / -1;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #bdbdbd;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 20px;
+    margin: 0 0 8px;
+  }
+
+  p {
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  button {
+    min-height: 44px;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 48px 20px;
+
+    mat-icon {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+    }
+
+    h3 {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 32px 16px;
+
+    mat-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    button {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+}
+
+.text-warn {
+  color: #f44336;
+}
+
+// Responsive adjustments
+@media (max-width: 599px) {
+  .member-form {
+    .form-layout {
+      flex-direction: column;
+    }
+
+    .avatar-section {
+      margin: 0 auto 24px;
+    }
+  }
+}

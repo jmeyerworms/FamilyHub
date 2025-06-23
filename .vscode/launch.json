@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "Launch Backend and Angular UI",
+      "configurations": ["Launch .NET Backend", "Launch Angular UI"]
+    }
+  ],
+  "configurations": [
+    {
+      "name": "Launch .NET Backend",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-backend",
+      "program": "${workspaceFolder}/FamilyHub.Api/bin/Debug/net9.0/FamilyHub.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/FamilyHub.Api",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "launchBrowser": {
+        "enabled": true,
+        "args": "http://localhost:5000"
+      }
+    },
+    {
+      "name": "Launch Angular UI",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "preLaunchTask": "npm: start-ui",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/FamilyHub"
+    }
+  ]
+}

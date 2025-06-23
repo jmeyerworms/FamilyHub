@@ -1,0 +1,155 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h1>Family Calendar</h1>
+    <div class="calendar-controls">
+      <div class="view-selector">
+        <button
+          mat-button
+          [class.active]="viewMode === 'month'"
+          (click)="setViewMode('month')"
+        >
+          Month
+        </button>
+        <button
+          mat-button
+          [class.active]="viewMode === 'week'"
+          (click)="setViewMode('week')"
+        >
+          Week
+        </button>
+        <button
+          mat-button
+          [class.active]="viewMode === 'day'"
+          (click)="setViewMode('day')"
+        >
+          Day
+        </button>
+      </div>
+      <div class="date-navigator">
+        <button mat-icon-button (click)="navigatePrevious()">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <span class="current-date">{{ currentDateLabel }}</span>
+        <button mat-icon-button (click)="navigateNext()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+        <button mat-button class="today-button" (click)="goToToday()">
+          Today
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Month View -->
+  <div class="calendar-view month-view" *ngIf="viewMode === 'month'">
+    <div class="weekdays-header">
+      <div *ngFor="let day of getWeekDays(); let i = index" class="weekday">
+        <span class="weekday-full">{{ weekDays[i] }}</span>
+        <span class="weekday-mobile">{{ weekDaysMobile[i] }}</span>
+      </div>
+    </div>
+    <div class="days-grid">
+      <div
+        *ngFor="let day of daysInMonth"
+        class="day-cell"
+        [class.other-month]="!day.isCurrentMonth"
+        [class.today]="day.isToday"
+        (click)="selectDay(day.date)"
+      >
+        <div class="day-number">{{ day.number }}</div>
+        <div class="day-events">
+          <div
+            *ngFor="let event of day.events.slice(0, getMaxEventsForCell())"
+            class="event-chip"
+            [ngClass]="event.category"
+          >
+            {{ event.title }}
+          </div>
+          <div
+            *ngIf="day.events.length > getMaxEventsForCell()"
+            class="more-events"
+          >
+            +{{ day.events.length - getMaxEventsForCell() }} more
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Week View -->
+  <div class="calendar-view week-view" *ngIf="viewMode === 'week'">
+    <div class="week-header">
+      <div class="time-column"></div>
+      <div *ngFor="let date of daysInWeek" class="date-column">
+        <div
+          class="date-cell"
+          [class.today]="date.isToday"
+          [class.selected]="isSameDay(date.date, currentViewDate)"
+          (click)="selectDayInWeekView(date.date)"
+        >
+          <div class="weekday">
+            <span class="weekday-full">{{ date.weekday }}</span>
+            <span class="weekday-mobile">{{ date.weekday.charAt(0) }}</span>
+          </div>
+          <div class="day-number">{{ date.number }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="week-body">
+      <div *ngFor="let hour of hoursInDay" class="hour-row">
+        <div class="time-label">{{ hour }}</div>
+        <div *ngFor="let day of daysInWeek" class="hour-cell">
+          <div
+            *ngFor="let event of getEventsForHourAndDay(hour, day)"
+            class="week-event"
+            [ngClass]="event.category"
+            [style.height.px]="event.durationInMinutes / 2"
+          >
+            {{ event.title }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day View -->
+  <div class="calendar-view day-view" *ngIf="viewMode === 'day'">
+    <div class="day-header">
+      <div class="day-date">
+        <div class="weekday">{{ currentViewDate | date : "EEEE" }}</div>
+        <div class="date-details">
+          {{ currentViewDate | date : "MMMM d, y" }}
+        </div>
+      </div>
+    </div>
+    <div class="day-timeline">
+      <div *ngFor="let hour of hoursInDay" class="timeline-hour">
+        <div class="hour-label">{{ hour }}</div>
+        <div class="hour-content">
+          <div
+            *ngFor="let event of getEventsForHour(hour)"
+            class="day-event"
+            [ngClass]="event.category"
+            [style.height.px]="event.durationInMinutes / 2"
+          >
+            <div class="event-time">
+              {{ event.startTime | date : "h:mm a" }}
+            </div>
+            <div class="event-title">{{ event.title }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Event FAB -->
+  <button
+    mat-fab
+    color="accent"
+    class="add-event-button"
+    aria-label="Add new event"
+    (click)="openNewEventDialog()"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

@@ -1,0 +1,102 @@
+<div class="login-modal mat-elevation-z4">
+  <div class="login-header">
+    <h2>Sign In</h2>
+    <button
+      mat-icon-button
+      class="close-button"
+      (click)="closeModal()"
+      [disabled]="isLoading"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="login-content">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          formControlName="email"
+          placeholder="your.email@example.com"
+          type="email"
+          autocomplete="email"
+          [disabled]="isLoading"
+          (input)="clearError()"
+        />
+        <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+          >Email is required</mat-error
+        >
+        <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
+          >Please enter a valid email</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hide ? 'password' : 'text'"
+          autocomplete="current-password"
+          [disabled]="isLoading"
+          (input)="clearError()"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hide = !hide"
+          [disabled]="isLoading"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+          >Password is required</mat-error
+        >
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')"
+          >Password must be at least 6 characters</mat-error
+        >
+      </mat-form-field>
+
+      <div class="error-alert" *ngIf="errorMessage">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+      <div class="action-buttons">
+        <div class="secondary-actions">
+          <button
+            mat-button
+            type="button"
+            (click)="showRegisterModal()"
+            [disabled]="isLoading"
+          >
+            Don't have an account? Register
+          </button>
+          <button
+            mat-button
+            type="button"
+            (click)="showForgotPassword()"
+            [disabled]="isLoading"
+            class="forgot-password-link"
+          >
+            Forgot Password?
+          </button>
+        </div>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!loginForm.valid || isLoading"
+        >
+          <mat-spinner
+            *ngIf="isLoading"
+            diameter="20"
+            class="spinner-button"
+          ></mat-spinner>
+          <span *ngIf="!isLoading">Sign In</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

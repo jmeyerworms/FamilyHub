@@ -1,0 +1,323 @@
+<div class="task-form-container">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Form -->
+  <div class="form-wrapper" *ngIf="!isLoading">
+    <!-- Header -->
+    <div class="form-header">
+      <button mat-icon-button (click)="cancel()" matTooltip="Back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ isEditMode ? "Edit Task" : "Create New Task" }}</h1>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+      <!-- Basic Information Card -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>info</mat-icon>
+            Basic Information
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <!-- Title -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Task Title</mat-label>
+              <input
+                matInput
+                formControlName="title"
+                placeholder="Enter task title"
+                maxlength="200"
+              />
+              <mat-hint
+                >{{ taskForm.get("title")?.value?.length || 0 }}/200</mat-hint
+              >
+              <mat-error *ngIf="hasError('title', 'required')">
+                Title is required
+              </mat-error>
+              <mat-error *ngIf="hasError('title', 'minlength')">
+                Title must be at least 3 characters
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <!-- Description -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Description (optional)</mat-label>
+              <textarea
+                matInput
+                formControlName="description"
+                placeholder="Enter task description"
+                rows="3"
+                maxlength="1000"
+              ></textarea>
+              <mat-hint
+                >{{
+                  taskForm.get("description")?.value?.length || 0
+                }}/1000</mat-hint
+              >
+            </mat-form-field>
+          </div>
+
+          <div class="form-row two-columns">
+            <!-- Priority -->
+            <mat-form-field appearance="outline">
+              <mat-label>Priority</mat-label>
+              <mat-select formControlName="priority">
+                <mat-option
+                  *ngFor="let priority of priorityOptions"
+                  [value]="priority.value"
+                >
+                  <div class="priority-option" [class]="priority.class">
+                    <mat-icon>{{ priority.icon }}</mat-icon>
+                    <span>{{ priority.label }}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Status (show only in edit mode) -->
+            <mat-form-field appearance="outline" *ngIf="isEditMode">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option
+                  *ngFor="let status of statusOptions"
+                  [value]="status.value"
+                >
+                  <div class="status-option">
+                    <mat-icon>{{ status.icon }}</mat-icon>
+                    <span>{{ status.label }}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Schedule Card -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>schedule</mat-icon>
+            Schedule
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row two-columns">
+            <!-- Due Date -->
+            <mat-form-field appearance="outline">
+              <mat-label>Due Date (optional)</mat-label>
+              <input
+                matInput
+                [matDatepicker]="dueDatePicker"
+                formControlName="dueDate"
+                placeholder="Select date"
+              />
+              <mat-datepicker-toggle matSuffix [for]="dueDatePicker">
+              </mat-datepicker-toggle>
+              <mat-datepicker #dueDatePicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Due Time -->
+            <mat-form-field appearance="outline">
+              <mat-label>Due Time (optional)</mat-label>
+              <input
+                matInput
+                type="time"
+                formControlName="dueTime"
+                placeholder="Select time"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="form-row two-columns">
+            <!-- Recurrence -->
+            <mat-form-field appearance="outline">
+              <mat-label>Recurrence</mat-label>
+              <mat-select formControlName="recurrence">
+                <mat-option
+                  *ngFor="let option of recurrenceOptions"
+                  [value]="option.value"
+                >
+                  {{ option.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Recurrence Pattern (show only if custom recurrence) -->
+            <mat-form-field
+              appearance="outline"
+              *ngIf="taskForm.get('recurrence')?.value === 'custom'"
+            >
+              <mat-label>Recurrence Pattern</mat-label>
+              <input
+                matInput
+                formControlName="recurrencePattern"
+                placeholder="e.g., Every 2 weeks"
+              />
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Assignment & Location Card -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>people</mat-icon>
+            Assignment & Location
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <!-- Assigned Members -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Assign to Family Members</mat-label>
+              <mat-select formControlName="assignedMemberIds" multiple>
+                <mat-option
+                  *ngFor="let member of familyMembers"
+                  [value]="member.id"
+                >
+                  <div class="member-option">
+                    <div
+                      class="member-avatar-small"
+                      [style.backgroundImage]="
+                        'url(' +
+                        (member.avatar ||
+                          'assets/images/avatars/default-avatar.png') +
+                        ')'
+                      "
+                    ></div>
+                    <span>{{ member.name }}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+              <mat-hint
+                >Select one or more family members to assign this task</mat-hint
+              >
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <!-- Location -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Location (optional)</mat-label>
+              <input
+                matInput
+                formControlName="location"
+                placeholder="Enter location"
+                maxlength="200"
+              />
+              <mat-icon matSuffix>place</mat-icon>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Tags Card -->
+      <mat-card class="form-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>local_offer</mat-icon>
+            Tags
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Current Tags -->
+          <div class="current-tags" *ngIf="tagsFormArray.length > 0">
+            <h4>Current Tags:</h4>
+            <div class="tags-list">
+              <mat-chip-set>
+                <mat-chip
+                  *ngFor="let tag of tagsFormArray.controls; let i = index"
+                  (removed)="removeTag(i)"
+                  [removable]="true"
+                >
+                  {{ tag.value }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+
+          <!-- Add New Tag -->
+          <div class="add-tag-section">
+            <div class="form-row two-columns">
+              <mat-form-field appearance="outline">
+                <mat-label>Add Tag</mat-label>
+                <input
+                  matInput
+                  formControlName="newTag"
+                  placeholder="Enter tag name"
+                  (keyup.enter)="addTag()"
+                />
+              </mat-form-field>
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="addTag()"
+                [disabled]="!taskForm.get('newTag')?.value?.trim()"
+              >
+                <mat-icon>add</mat-icon>
+                Add Tag
+              </button>
+            </div>
+          </div>
+
+          <!-- Suggested Tags -->
+          <div class="suggested-tags">
+            <h4>Suggested Tags:</h4>
+            <div class="tags-suggestions">
+              <button
+                type="button"
+                mat-chip-button
+                *ngFor="let tag of availableTags"
+                (click)="addSuggestedTag(tag)"
+                [disabled]="tagsFormArray.value.includes(tag)"
+                class="suggestion-chip"
+              >
+                {{ tag }}
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          mat-button
+          (click)="cancel()"
+          [disabled]="isSaving"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="taskForm.invalid || isSaving"
+        >
+          <mat-spinner diameter="20" *ngIf="isSaving"></mat-spinner>
+          <span *ngIf="!isSaving">
+            {{ isEditMode ? "Update Task" : "Create Task" }}
+          </span>
+          <span *ngIf="isSaving">
+            {{ isEditMode ? "Updating..." : "Creating..." }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="app-shell">
+  <app-header *ngIf="!isLoginRoute()"></app-header>
+  <main class="shell-content">
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer *ngIf="!isLoginRoute()"></app-footer>
+
+  <!-- Login overlay container -->
+  <ng-container *ngIf="loginModalService.isLoginModalOpen$ | async">
+    <div class="login-overlay">
+      <div class="login-modal-container">
+        <app-login-modal></app-login-modal>
+      </div>
+    </div>
+  </ng-container>
+</div>

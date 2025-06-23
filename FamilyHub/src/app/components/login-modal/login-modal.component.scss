@@ -1,0 +1,151 @@
+.login-modal {
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.login-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  h2 {
+    margin: 0;
+    font-weight: 500;
+    color: #1976d2;
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: white;
+
+    h2 {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.login-content {
+  padding: 24px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 20px 16px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+
+  .secondary-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+
+    .forgot-password-link {
+      font-size: 0.875rem;
+      color: #1976d2;
+      text-decoration: none;
+      padding: 4px 8px;
+    }
+  }
+
+  button {
+    min-height: 44px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &[type="submit"] {
+      flex: 1;
+      max-width: 200px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+
+    .secondary-actions {
+      align-items: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 8px;
+      min-height: 44px; /* Better touch target for mobile */
+    }
+  }
+}
+
+.spinner-button {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+button[type="submit"] {
+  min-width: 80px;
+  min-height: 44px; /* Better touch target for mobile */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile optimizations */
+@media (max-width: 599px) {
+  .login-modal {
+    border-radius: 8px 8px 0 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .login-header {
+    padding: 12px 16px;
+  }
+
+  .login-content {
+    padding: 16px;
+  }
+}
+
+.error-alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #ffebee;
+  border: 1px solid #f44336;
+  border-radius: 8px;
+  color: #c62828;
+  font-size: 14px;
+  margin-bottom: 8px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -1,0 +1,160 @@
+<div class="family-container">
+  <mat-card class="family-card">
+    <mat-card-header>
+      <mat-card-title>Family Members</mat-card-title>
+      <div class="header-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="toggleAddForm()"
+          class="add-member-btn"
+        >
+          <mat-icon>{{ showAddForm ? "close" : "person_add" }}</mat-icon>
+          {{ showAddForm ? "Cancel" : "Add Member" }}
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Add/Edit Member Form -->
+      <div *ngIf="showAddForm" class="member-form-container mat-elevation-z2">
+        <h2>{{ editMode ? "Edit" : "Add" }} Family Member</h2>
+
+        <form
+          [formGroup]="memberForm"
+          (ngSubmit)="onSubmit()"
+          class="member-form"
+        >
+          <div class="form-layout">
+            <div class="avatar-section">
+              <div
+                class="avatar-preview"
+                [style.backgroundImage]="
+                  'url(' +
+                  (memberForm.get('avatar')?.value ||
+                    'assets/images/avatars/default-avatar.png') +
+                  ')'
+                "
+              ></div>
+
+              <button
+                type="button"
+                mat-stroked-button
+                (click)="generateRandomAvatar()"
+              >
+                <mat-icon>refresh</mat-icon>
+                Random Avatar
+              </button>
+            </div>
+
+            <div class="form-fields">
+              <input type="hidden" formControlName="id" />
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Enter name"
+                  formControlName="name"
+                />
+                <mat-error *ngIf="memberForm.get('name')?.hasError('required')">
+                  Name is required
+                </mat-error>
+                <mat-error
+                  *ngIf="memberForm.get('name')?.hasError('minlength')"
+                >
+                  Name must be at least 2 characters
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Avatar URL (optional)</mat-label>
+                <input
+                  matInput
+                  placeholder="Enter avatar URL"
+                  formControlName="avatar"
+                />
+              </mat-form-field>
+
+              <div class="form-actions">
+                <button type="button" mat-button (click)="resetForm()">
+                  Reset
+                </button>
+                <button
+                  type="submit"
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="memberForm.invalid"
+                >
+                  {{ editMode ? "Update" : "Add" }} Member
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading family members...</p>
+      </div>
+
+      <!-- Family members list -->
+      <div *ngIf="!loading" class="members-grid">
+        <mat-card
+          *ngFor="let member of familyMembers"
+          class="member-card mat-elevation-z2"
+        >
+          <div
+            class="member-avatar"
+            [style.backgroundImage]="
+              'url(' +
+              (member.avatar || 'assets/images/avatars/default-avatar.png') +
+              ')'
+            "
+          ></div>
+
+          <div class="member-info">
+            <h3>{{ member.name }}</h3>
+          </div>
+
+          <div class="member-actions">
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="memberMenu"
+              aria-label="Member actions"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #memberMenu="matMenu">
+              <button mat-menu-item (click)="editMember(member)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
+
+              <mat-divider></mat-divider>
+
+              <button mat-menu-item (click)="deleteMember(member)">
+                <mat-icon color="warn">delete</mat-icon>
+                <span class="text-warn">Remove</span>
+              </button>
+            </mat-menu>
+          </div>
+        </mat-card>
+
+        <!-- Empty state -->
+        <div *ngIf="familyMembers.length === 0" class="empty-state">
+          <mat-icon>groups</mat-icon>
+          <h3>No family members yet</h3>
+          <p>Add your first family member to get started</p>
+          <button mat-raised-button color="primary" (click)="toggleAddForm()">
+            <mat-icon>person_add</mat-icon>
+            Add Family Member
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

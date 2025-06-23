@@ -1,0 +1,400 @@
+.tasks-container {
+  padding: 16px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px;
+  }
+}
+
+.tasks-card {
+  margin-bottom: 20px;
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      gap: 12px;
+    }
+
+    mat-card-title {
+      flex: 1;
+      margin: 0;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      button[mat-fab] {
+        width: 48px;
+        height: 48px;
+
+        @media (max-width: 768px) {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
+}
+
+// Filters styles
+.filters-panel {
+  margin-bottom: 20px;
+
+  .mat-expansion-panel-header {
+    min-height: 48px; /* Better touch target */
+
+    @media (max-width: 480px) {
+      padding: 0 12px;
+    }
+  }
+}
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+
+  @media (max-width: 768px) {
+    min-width: 150px;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 100%;
+    flex: none;
+  }
+}
+
+.clear-filters-btn {
+  margin-top: 8px;
+  height: 40px;
+  min-height: 44px; /* Better touch target */
+
+  @media (max-width: 480px) {
+    width: 100%;
+    margin-top: 12px;
+  }
+}
+
+// Status and priority indicators
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+
+  &.status-todo {
+    background-color: #e0e0e0;
+    color: #616161;
+  }
+
+  &.status-in-progress {
+    background-color: #bbdefb;
+    color: #0d47a1;
+  }
+
+  &.status-completed {
+    background-color: #c8e6c9;
+    color: #1b5e20;
+  }
+
+  &.status-canceled {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+  }
+}
+
+.priority-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.priority-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.priority-low {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.priority-medium {
+  background-color: #ffecb3;
+  color: #ff8f00;
+}
+
+.priority-high {
+  background-color: #ffcc80;
+  color: #ef6c00;
+}
+
+.priority-urgent {
+  background-color: #ffcdd2;
+  color: #d32f2f;
+}
+
+// Task cards for mobile view - enhanced
+.tasks-list-mobile {
+  display: block;
+
+  .task-card {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    .mat-card-subtitle {
+      display: flex;
+      align-items: center;
+    }
+
+    .mat-card-actions {
+      padding: 8px 16px 16px;
+
+      button {
+        min-height: 44px;
+        margin-right: 8px;
+        border-radius: 8px;
+
+        @media (max-width: 480px) {
+          flex: 1;
+          margin: 0 4px;
+          font-size: 0.85rem;
+
+          mat-icon {
+            font-size: 18px;
+            margin-right: 4px;
+          }
+        }
+      }
+
+      @media (max-width: 480px) {
+        display: flex;
+        gap: 8px;
+        padding: 12px;
+      }
+    }
+  }
+
+  .task-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+
+    .due-date,
+    .assigned-to,
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: rgba(0, 0, 0, 0.54);
+      }
+    }
+  }
+
+  .tags {
+    margin-top: 8px;
+  }
+}
+
+// Table for desktop view - enhanced responsive
+.tasks-table-desktop {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+
+  table {
+    width: 100%;
+    min-width: 800px; /* Ensure minimum width for readability */
+  }
+
+  .task-title {
+    font-weight: 500;
+  }
+
+  .task-description {
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px;
+    margin-top: 4px;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// No tasks placeholder
+.no-tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  color: rgba(0, 0, 0, 0.38);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+}
+
+// Loading state
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+
+  mat-spinner {
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+// No family state
+.no-family-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  background-color: #fafafa;
+
+  .large-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #3f51b5;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0 0 24px 0;
+    color: #666;
+    font-size: 14px;
+    max-width: 300px;
+  }
+
+  button {
+    background-color: #3f51b5;
+  }
+
+  @media (max-width: 480px) {
+    padding: 40px 16px;
+
+    .large-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 44px;
+    }
+  }
+}
+
+// Enhanced responsive layout
+@media screen and (max-width: 959px) {
+  .tasks-table-desktop {
+    display: none;
+  }
+
+  .filter-field {
+    min-width: 100%;
+  }
+
+  .filters-container {
+    .clear-filters-btn {
+      order: 1;
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .tasks-list-mobile {
+    display: none;
+  }
+}
+
+// Mobile-specific improvements
+@media (max-width: 480px) {
+  .status-badge,
+  .priority-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .task-details {
+    .due-date,
+    .assigned-to,
+    .location {
+      font-size: 0.85rem;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

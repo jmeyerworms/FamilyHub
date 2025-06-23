@@ -1,0 +1,283 @@
+<div class="tasks-container">
+  <mat-card class="tasks-card">
+    <mat-card-header>
+      <mat-card-title>Tasks</mat-card-title>
+      <div class="header-actions" *ngIf="!loading && currentFamilyId !== null">
+        <button
+          mat-fab
+          color="primary"
+          routerLink="/tasks/create"
+          matTooltip="Create new task"
+          aria-label="Create new task"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading tasks...</p>
+      </div>
+
+      <!-- No family message -->
+      <div
+        *ngIf="!loading && currentFamilyId === null"
+        class="no-family-container"
+      >
+        <mat-icon class="large-icon">family_restroom</mat-icon>
+        <h3>No Family Found</h3>
+        <p>You need to create or join a family before you can manage tasks.</p>
+        <button mat-raised-button color="primary" (click)="createFamily()">
+          Create Family
+        </button>
+      </div>
+      <!-- Filters panel -->
+      <mat-expansion-panel
+        *ngIf="!loading && currentFamilyId !== null"
+        class="filters-panel"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>filter_list</mat-icon>
+            Filters
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="filters-container">
+          <!-- Search filter -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Search</mat-label>
+            <input
+              matInput
+              [formControl]="searchFilter"
+              placeholder="Search tasks"
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <!-- Status filter -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Status</mat-label>
+            <mat-select [formControl]="statusFilter">
+              <mat-option [value]="">All</mat-option>
+              <mat-option
+                *ngFor="let status of taskStatuses"
+                [value]="status.value"
+              >
+                {{ status.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Priority filter -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Priority</mat-label>
+            <mat-select [formControl]="priorityFilter">
+              <mat-option [value]="">All</mat-option>
+              <mat-option
+                *ngFor="let priority of taskPriorities"
+                [value]="priority.value"
+              >
+                {{ priority.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Date filter -->
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Due Date</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [formControl]="dateFilter"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker title="Select due date"></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Clear filters button -->
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="clearFilters()"
+            class="clear-filters-btn"
+          >
+            <mat-icon>clear</mat-icon>
+            Clear Filters
+          </button>
+        </div>
+      </mat-expansion-panel>
+      <!-- Tasks list for mobile view -->
+      <div *ngIf="!loading" class="tasks-list-mobile">
+        <mat-card *ngFor="let task of filteredTasks" class="task-card">
+          <mat-card-header>
+            <div
+              mat-card-avatar
+              [class]="getPriorityClass(task.priority)"
+              class="priority-indicator"
+            ></div>
+            <mat-card-title>{{ task.title }}</mat-card-title>
+            <mat-card-subtitle>
+              <span
+                [class]="getStatusClass(task.status)"
+                class="status-badge"
+                >{{ getStatusName(task.status) }}</span
+              >
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p *ngIf="task.description">{{ task.description }}</p>
+
+            <div class="task-details">
+              <div *ngIf="task.dueDate" class="due-date">
+                <mat-icon>event</mat-icon>
+                <span>{{ task.dueDate | date : "mediumDate" }}</span>
+              </div>
+              <div
+                *ngIf="task.assignedMembers && task.assignedMembers.length > 0"
+                class="assigned-to"
+              >
+                <mat-icon>person</mat-icon>
+                <mat-chip-listbox>
+                  <mat-chip *ngFor="let member of task.assignedMembers">
+                    {{ member.name }}
+                  </mat-chip>
+                </mat-chip-listbox>
+              </div>
+
+              <div *ngIf="task.location" class="location">
+                <mat-icon>place</mat-icon>
+                <span>{{ task.location }}</span>
+              </div>
+
+              <mat-chip-listbox
+                *ngIf="task.tags && task.tags.length > 0"
+                class="tags"
+              >
+                <mat-chip *ngFor="let tag of task.tags"> #{{ tag }} </mat-chip>
+              </mat-chip-listbox>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button color="primary">
+              <mat-icon>edit</mat-icon>
+              Edit
+            </button>
+            <button mat-button color="accent">
+              <mat-icon>check_circle</mat-icon>
+              Complete
+            </button>
+          </mat-card-actions>
+        </mat-card>
+
+        <div *ngIf="filteredTasks.length === 0" class="no-tasks">
+          <mat-icon>assignment_late</mat-icon>
+          <p>No tasks found</p>
+        </div>
+      </div>
+      <!-- Tasks table for desktop view -->
+      <div *ngIf="!loading" class="tasks-table-desktop">
+        <table
+          mat-table
+          [dataSource]="filteredTasks"
+          matSort
+          class="mat-elevation-z2"
+        >
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Task</th>
+            <td mat-cell *matCellDef="let task">
+              <div class="task-title">{{ task.title }}</div>
+              <div class="task-description" *ngIf="task.description">
+                {{ task.description }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let task">
+              <span
+                [class]="getStatusClass(task.status)"
+                class="status-badge"
+                >{{ getStatusName(task.status) }}</span
+              >
+            </td>
+          </ng-container>
+
+          <!-- Priority Column -->
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Priority</th>
+            <td mat-cell *matCellDef="let task">
+              <span
+                [class]="getPriorityClass(task.priority)"
+                class="priority-badge"
+                >{{ getPriorityName(task.priority) }}</span
+              >
+            </td>
+          </ng-container>
+
+          <!-- Due Date Column -->
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+            <td mat-cell *matCellDef="let task">
+              <span *ngIf="task.dueDate">{{
+                task.dueDate | date : "mediumDate"
+              }}</span>
+              <span *ngIf="!task.dueDate">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Assigned To Column -->
+          <ng-container matColumnDef="assignedTo">
+            <th mat-header-cell *matHeaderCellDef>Assigned To</th>
+            <td mat-cell *matCellDef="let task">
+              <mat-chip-listbox
+                *ngIf="task.assignedMembers && task.assignedMembers.length > 0"
+              >
+                <mat-chip *ngFor="let member of task.assignedMembers">{{
+                  member.name
+                }}</mat-chip>
+              </mat-chip-listbox>
+              <span
+                *ngIf="
+                  !task.assignedMembers || task.assignedMembers.length === 0
+                "
+                >-</span
+              >
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let task">
+              <button mat-icon-button color="primary" matTooltip="Edit task">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" matTooltip="Complete task">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="filteredTasks.length === 0" class="no-tasks">
+          <mat-icon>assignment_late</mat-icon>
+          <p>No tasks found</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

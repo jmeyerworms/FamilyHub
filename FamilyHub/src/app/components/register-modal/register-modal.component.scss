@@ -1,0 +1,88 @@
+.register-modal {
+  width: 400px;
+  max-width: 90vw;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+.register-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+
+  h2 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+
+  .close-button {
+    color: white;
+  }
+}
+
+.register-content {
+  padding: 24px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+
+    button:first-child {
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+
+  .spinner-button {
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .register-modal {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .register-content {
+    padding: 16px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+
+    button:first-child {
+      order: 2;
+      margin-top: 8px;
+    }
+
+    button:last-child {
+      order: 1;
+    }
+  }
+}

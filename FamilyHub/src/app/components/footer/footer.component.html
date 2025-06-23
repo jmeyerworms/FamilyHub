@@ -1,0 +1,46 @@
+<footer class="main-footer">
+  <div class="container">
+    <div class="footer-nav">
+      <div class="footer-links">
+        <a routerLink="/home">Home</a>
+        <a routerLink="/calendar">Calendar</a>
+        <a routerLink="/tasks">Tasks</a>
+        <a routerLink="/photos">Photos</a>
+      </div>
+      <div class="social-icons">
+        <a href="#" aria-label="Facebook">
+          <mat-icon>facebook</mat-icon>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <mat-icon>twitter</mat-icon>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <mat-icon>photo_camera</mat-icon>
+        </a>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; {{ currentYear }} Family Hub. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Mobile Navigation Bar -->
+<nav class="mobile-nav-bar">
+  <a routerLink="/home" routerLinkActive="active">
+    <mat-icon>home</mat-icon>
+    <span>Home</span>
+  </a>
+  <a routerLink="/calendar" routerLinkActive="active">
+    <mat-icon>calendar_today</mat-icon>
+    <span>Calendar</span>
+  </a>
+  <a routerLink="/tasks" routerLinkActive="active">
+    <mat-icon>checklist</mat-icon>
+    <span>Tasks</span>
+  </a>
+  <a routerLink="/photos" routerLinkActive="active">
+    <mat-icon>photo_library</mat-icon>
+    <span>Photos</span>
+  </a>
+</nav>
